@@ -4,16 +4,13 @@ namespace InventoryService
 {
     public class KafkaProducer
     {
-        private readonly IProducer<Null, string> _producer;
-        public KafkaProducer(string broker)
+        public async Task SendMessageAsync(string topic, string message)
         {
-            var config = new ProducerConfig { BootstrapServers = broker };
-            _producer = new ProducerBuilder<Null, string>(config).Build();
-        }
+            var config = new ProducerConfig { BootstrapServers = "kafka:9092" };
 
-        public async Task SendMessage(string topic, string message)
-        {
-            await _producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
+            using var producer = new ProducerBuilder<Null, string>(config).Build();
+            await producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
         }
     }
+
 }
