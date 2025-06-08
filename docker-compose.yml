@@ -8,6 +8,7 @@ services:
       - "5000:80"
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - ASPNETCORE_URLS=http://+:80
     depends_on:
       - kafka
 
@@ -15,7 +16,7 @@ services:
     build:
       context: ../ERPSystem/InventoryService
     ports:
-      - "5001:80"
+      - "5001:8080"
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
     depends_on:
@@ -25,9 +26,10 @@ services:
     build:
       context: ../ERPSystem/OrderService
     ports:
-      - "5002:80"
+      - "5002:8080"
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - ASPNETCORE_URLS=http://+:80
     depends_on:
       - kafka
 
@@ -48,6 +50,7 @@ services:
     environment:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
     depends_on:
       - zookeeper
@@ -58,3 +61,11 @@ services:
       - "2181:2181"
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_password123
+    ports:
+      - "1433:1433"
