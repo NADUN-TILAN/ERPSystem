@@ -1,20 +1,19 @@
 ﻿# Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /app
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
 
 # Copy csproj and restore as distinct layers (better caching)
-COPY *.csproj ./
+COPY . .
 RUN dotnet restore
 
 # Copy the rest of the code and publish
-COPY . ./
-RUN dotnet publish -c Release -o out
+RUN dotnet publish -c Release -o /app/publish
 
 # Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 
-COPY --from=build /app/out ./
+COPY --from=build /app/publish .
 
 # Expose port 80
 EXPOSE 80

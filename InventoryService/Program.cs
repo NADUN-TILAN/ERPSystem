@@ -2,6 +2,7 @@ using InventoryService.Data;
 //using InventoryService.Services;
 using Confluent.Kafka;
 using Microsoft.EntityFrameworkCore;
+using InventoryService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Kafka Producer singleton
-//builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
