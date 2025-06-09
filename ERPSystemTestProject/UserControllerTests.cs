@@ -22,7 +22,7 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async Task GetUsers_ReturnsAllUsers()
+    public void GetUsersReturnsAllUsers()
     {
         // Arrange
         var context = GetDbContext();
@@ -33,7 +33,7 @@ public class UserControllerTests
         var controller = new UserController(context);
 
         // Act
-        var result = await controller.GetUsers();
+        var result = controller.GetUsers();
 
         // Assert
         var actionResult = Assert.IsType<ActionResult<IEnumerable<User>>>(result);
@@ -42,7 +42,7 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async Task GetUserById_ReturnsUser_WhenUserExists()
+    public void GetUserByIdReturnsUserWhenUserExists()
     {
         // Arrange
         var context = GetDbContext();
@@ -53,7 +53,7 @@ public class UserControllerTests
         var controller = new UserController(context);
 
         // Act
-        var result = await controller.GetUser(1);
+        var result = controller.GetUser(1);
 
         // Assert
         var actionResult = Assert.IsType<ActionResult<User>>(result);
@@ -63,14 +63,14 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async Task GetUserById_ReturnsNotFound_WhenUserDoesNotExist()
+    public void GetUserByIdReturnsNotFoundWhenUserDoesNotExist()
     {
         // Arrange
         var context = GetDbContext();
         var controller = new UserController(context);
 
         // Act
-        var result = await controller.GetUser(99);
+        var result = controller.GetUser(99);
 
         // Assert
         var actionResult = Assert.IsType<ActionResult<User>>(result);

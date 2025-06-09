@@ -7,6 +7,7 @@ using Moq;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System;
 
 namespace ERPSystemTestProject
 {
@@ -15,9 +16,12 @@ namespace ERPSystemTestProject
         private AppDbContext GetDbContext()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: "InventoryTestDb")
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unique DB per test
                 .Options;
-            return new AppDbContext(options);
+            var context = new AppDbContext(options);
+            context.Database.EnsureDeleted(); // Ensure clean state
+            context.Database.EnsureCreated();
+            return context;
         }
 
         [Fact]

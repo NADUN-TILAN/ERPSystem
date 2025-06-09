@@ -7,6 +7,7 @@ using Moq;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using OrderService;
 
 public class OrdersControllerTests
 {
@@ -25,7 +26,7 @@ public class OrdersControllerTests
         context.Orders.Add(new Order { Id = 1, OrderNumber = "ORD001", Items = new List<OrderItem>() });
         context.SaveChanges();
 
-        var kafkaMock = new Mock<IKafkaProducer>();
+        var kafkaMock = new Mock<OrderService.IKafkaProducer>();
         var controller = new OrdersController(context, kafkaMock.Object);
 
         var result = await controller.GetOrders();
